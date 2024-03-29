@@ -22,8 +22,45 @@
   </header>
   <div class="container">
     <div class="text-center mb-5">
-      <button id= "add-task" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#formModal">Add Task</button>
+      <button id="add-task" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#formModal">Add Task</button>
     </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="formModalLabel">Add Bread Crumb</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <!-- task title -->
+            <div class="form-group p-2">
+              <label for="task-input">Task Title</label>
+              <input type="task" class="form-control" id="task-input" aria-describedby="taskHelp">
+              <small id="tasklHelp" class="form-text text-muted">make a title for your bread crumb!</small>
+            </div>
+            <!-- due date -->
+            <div class="form-group p-2">
+              <label for="date-input">Due Date</label>
+              <input type="datetime" class="form-control" id="date-input" aria-describedby="dateHelp">
+              <small id="tasklHelp" class="form-text text-muted">Select a due date for your task.</small>
+            </div>
+            <!-- task description -->
+            <div class="form-group p-2">
+              <label for="exampleFormControlTextarea1">Task Description</label>
+              <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" aria-describedby="descriptionHelp"></textarea>
+              <small id="descriptionHelp" class="form-text text-muted">Describe your task and the criteria to qualify as done.</small>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-success btn btn-primary">Add Crumb!</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Todo: Create a modal with a form to add tasks -->
     <div class="row swim-lanes text-center justify-content-between">
       <div class="col-12 col-lg-4 d-flex">
@@ -45,16 +82,16 @@
             <div id="in-progress-cards"></div>
           </div>
         </div>
+      </div>
+      <div class="col-12 col-lg-4 d-flex">
+        <div id="done" class="card border-light mb-3 lane flex-grow-1">
+          <div class="card-header bg-white">
+            <h2 class="card-title mb-1">Done</h2>
+          </div>
+          <div class="card-body bg-light">
+            <div id="done-cards"></div>
+          </div>
         </div>
-        <div class="col-12 col-lg-4 d-flex">
-          <div id="done" class="card border-light mb-3 lane flex-grow-1">
-            <div class="card-header bg-white">
-              <h2 class="card-title mb-1">Done</h2>
-            </div>
-            <div class="card-body bg-light">
-              <div id="done-cards"></div>
-          </div>
-          </div>
       </div>
     </div>
   </div>

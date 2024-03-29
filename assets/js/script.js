@@ -2,8 +2,6 @@
 let taskList = JSON.parse(localStorage.getItem("tasks"));
 let nextId = JSON.parse(localStorage.getItem("nextId"));
 
-// add-task button
-const addTaskbutton = document.getElementById('add-task')
 
 // Todo: create a function to generate a unique task id
 function generateTaskId() {
