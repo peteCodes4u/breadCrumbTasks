@@ -2,6 +2,21 @@
 let taskList = JSON.parse(localStorage.getItem("tasks"));
 let nextId = JSON.parse(localStorage.getItem("nextId"));
 
+// pete's code starts here
+
+$(function () {
+    $('#calandarSelect').datepicker({
+      changeMonth: true,
+      changeYear: true,
+    });
+  });
+
+// pete's code  ends here
+
+
+
+
+
 
 // Todo: create a function to generate a unique task id
 function generateTaskId() {
