@@ -44,9 +44,22 @@
             <!-- due date -->
             <div class="form-group p-2">
               <label for="date-input">Due Date</label>
-              <input type="datetime" class="form-control" id="date-input" aria-describedby="dateHelp">
-              <small id="tasklHelp" class="form-text text-muted">Select a due date for your task.</small>
+
+              <!-- calandar picker -->
+              <div>
+                <input
+                type="text"
+                class="form-control"
+                id="calandarSelect"
+                autocomplete="off"
+              />
+              </div>
+              <small id="datelHelp" class="form-text text-muted">Select a due date for your task.</small>
+
             </div>
+
+
+
             <!-- task description -->
             <div class="form-group p-2">
               <label for="exampleFormControlTextarea1">Task Description</label>
