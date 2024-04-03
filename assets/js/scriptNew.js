@@ -22,11 +22,21 @@ function createTaskCard(task) {
     let rmvTaskBtn = $("<a>").addClass("btn btn-danger delete-task").text("Remove Task").attr("data-id", task.id);
 
 
-    // append elements to task card to create card
+    // create task card
     taskBody.append(taskState, taskDate, rmvTaskBtn);
-    // Append remaining elements into the card body
-    taskCard.append(taskTitle, taskBody);
-    // Return the task card
+    taskCard.append(taskTitle, taskBody); 
     return taskCard;
 
 }
+
+// Todo: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
+$(document).ready(function () {
+
+    // date picker
+    $(function () {
+        $('#calendarSelect').datepicker({
+          changeMonth: true,
+          changeYear: true,
+        });
+      });
+});
