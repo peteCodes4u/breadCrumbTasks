@@ -29,6 +29,58 @@ function createTaskCard(task) {
 
 }
 
+
+// add new task
+function handleAddTask(event){
+
+
+    // Steps
+    // 1. establish form input variables
+    // 2. evoke generateTaskId to get new id for task
+    // 3. establish new task object model using established form input variables 
+    // 4. restet the form
+    // 5. establish local storage for task data
+    // 6. push data to local storage
+    // 7. evoke renderTasksList **Note- Render task list TBD POC created for testing**
+
+    event.preventDefault();
+
+    // form input variables
+    let taskInputEl = $('#task-input');
+    let dateInputEl = $('#calendarSelect');
+    let taskDescriptionInputEl = $('#taskDescription');
+
+    // envoke generateTaskId
+    generateTaskId();
+
+    // task object model
+    let nuTask = {
+        title: taskInputEl.val(),
+        date: dateInputEl.val(),
+        description: taskDescriptionInputEl.val(),
+        id: nextId,
+        status: "to-do"
+
+    };
+
+    // resets form
+    taskInputEl.val('');
+    dateInputEl.val('');
+    taskDescriptionInputEl.val('');
+
+    // set local storage item for tasks
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+
+    // add task data to localstorage 
+    tasks.push(nuTask);
+
+
+    // Evoke Render task list
+    renderTaskList();
+
+
+}
+
 // Todo: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
 $(document).ready(function () {
 
