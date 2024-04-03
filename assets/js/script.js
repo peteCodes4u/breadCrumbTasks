@@ -1,102 +1,135 @@
-// Retrieve tasks and nextId from localStorage
-let taskList = JSON.parse(localStorage.getItem("tasks"));
-let nextId = JSON.parse(localStorage.getItem("nextId"));
+// empty array for tasks in local storage
+let taskList = JSON.parse(localStorage.getItem("tasks")) || [];
 
-// pete's code starts here
+// start next id at 0 when no existing task data
+let nextId = JSON.parse(localStorage.getItem("nextId")) || 0;
 
+// establish reference to to-do section html for appending tasks
+let toDoListEL = $('#todo-cards');
 
-
-// form data constants
-
-const formEL = $('#breadCrumbForm');
-const taskInputEl = $('#task-input');
-const dateInputEl = $('#calendarSelect');
-const taskDescriptionInputEl = $('#taskDescription');
-const toDoListEL = $('#sortable');
-
-// calendar selection feature
-
-$(function () {
-    $('#calendarSelect').datepicker({
-      changeMonth: true,
-      changeYear: true,
-    });
-  });
-
-  const printBreadCrumb = function (task, date, description) {
-    const taskEl = $('<div>');
-    const taskData = task.concat(' due on ', date, " ", description);
-    taskEl.text(taskData);
-    taskEl.appendTo(toDoListEL);
-  };
-  
-  const FormSubmit = function (event) {
-    event.preventDefault();
-  
-    const taskInput = taskInputEl.val();
-    const dateInput = dateInputEl.val();
-    const taskDescriptionInput = taskDescriptionInputEl.val();
-  
-    if (!taskInput || !dateInput || !taskDescriptionInput) {
-      alert('Please provide input for Task title, Due Date and Description!');
-      return;
-    }
-  
-    printBreadCrumb(taskInput, dateInput, taskDescriptionInput);
-  
-    // resets form
-    taskInputEl.val('');
-    dateInputEl.val('');
-    taskDescriptionInputEl.val('');
-
-
-    $(function () {
-        $('#sortable').sortable();
-      });
-
-  };
-  
-  formEL.on('submit', FormSubmit);
-
-// pete's code  ends here
-
-
-// Todo: create a function to generate a unique task id
+// task id counts +1 starting at 0 and sets value in localstorage
 function generateTaskId() {
-
-   let bcid = "BCID" + Math.floor(Math.random() * 10000000);
-   return bcid;
-    
+    nextId++;
+    localStorage.setItem('nextId', nextId);
 }
 
-// Todo: create a function to create a task card
+//task card function
 function createTaskCard(task) {
+    let taskCard = $("<div>").addClass("card drag").attr("id", task.id).css('margin', '10px');
+    let taskCardHeader = $("<h4>").addClass("card-header").text(task.title);
+    let taskCardBod = $("<div>").addClass("card-body").text(task.description);
+    let taskCardDate = $("<div>").addClass("card-footer").text(task.dateEl);
+    let taskCardId = $("<p>").addClass("card-text").text(task.id);
+    let deleteTaskBtn = $("<a>").addClass("btn btn-danger remove-task").attr("id", "remove-task").text("Remove");
 
+    // append elements to task card body
+    taskCardBod.append(taskCardId, taskCardDate, deleteTaskBtn);
 
+    // Append header to card body
+    taskCard.append(taskCardHeader, taskCardBod);
 
+    // Return the task card
+    return taskCard;
 }
 
-// Todo: create a function to render the task list and make cards draggable
+// function generate task list with draggable cards 
 function renderTaskList() {
 
+    //pull tasks from local storage
+    taskList = JSON.parse(localStorage.getItem("tasks")) || [];
+
+    // clear list to prevent duplicating tasks
+    toDoListEL.empty();
+
+    // Loop through the task list and append to 'to-do' lane
+    for (let task of taskList) {
+        let card = createTaskCard(task);
+        toDoListEL.append(card);
+    }
+
+    // add drag property to task cards
+    $(".drag").draggable({
+        zIndex: 100,
+        opacity: 0.5,
+        helper: function (event) {
+            let originalcard = $(event.target).hasClass('.drag') ? $(event.target) : $(event.target).closest('.drag');
+            return originalcard.clone().css({ width: originalcard.outerWidth(), });
+        }
+    });
 }
 
-// Todo: create a function to handle adding a new task
-function handleAddTask(event){
+// function for adding new tasks
+function handleAddTask(event) {
+    event.preventDefault();
+
+    // pull data from bread crumbs form
+    let titleEl = document.querySelector("#titleData");
+    let dateEl = document.querySelector("#dateData");
+    let descriptionEl = document.querySelector("#statusData");
+
+    // New task Id
+    generateTaskId();
+
+    // Create a new task object
+    let nuTask = {
+        title: titleEl.value,
+        date: dateEl.value,
+        description: descriptionEl.value,
+        id: nextId,
+        status: "to-do"
+    };
+
+    // reset form after bread crumb add
+    document.getElementById("form").reset();
+
+    // push new task to local storage
+    taskList.push(nuTask);
+    localStorage.setItem('tasks', JSON.stringify(taskList));
+
+    // evoke renderTaskList to populate 'To-do' lane
+    renderTaskList();
+}
+
+
+// function remove a task
+function handleDeleteTask(event) {
+
 
 }
 
-// Todo: create a function to handle deleting a task
-function handleDeleteTask(event){
-
-}
-
-// Todo: create a function to handle dropping a task into a new status lane
+// function to handle dropping a task into a new status lane
 function handleDrop(event, ui) {
 
+
 }
 
-// Todo: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
+// document ready functions
 $(document).ready(function () {
 
+    // add listener on 'add crumb' submit button in bread crumbs form
+    $("#addCrumb").on("click", handleAddTask);
+
+    //  add listener for removing tasks
+    $(".container").on("click", '.remove-task', function (event) {
+
+        // eliminate the task from the viewport
+        $(event.target).closest('.card').remove();
+    });
+
+    // add date picker to due date field
+    $("#dateData").datepicker({
+        changeMonth: true,
+        changeYear: true,
+    });
+
+    // Make the .lane elements droppable
+    $(".lane").droppable({
+        accept: ".drag",
+        drop: function (event, ui) {
+            ui.draggable.detach().appendTo($(this));
+        }
+    });
+
+    // evoke render task list to populate lanes
+    renderTaskList();
 });
