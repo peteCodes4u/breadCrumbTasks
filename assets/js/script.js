@@ -5,7 +5,8 @@ let taskList = JSON.parse(localStorage.getItem("tasks")) || [];
 let nextId = JSON.parse(localStorage.getItem("nextId")) || 0;
 
 // establish reference to to-do section html for appending tasks
-let toDoListEL = $('#todo-cards');
+const toDoListEL = $('#todo-cards');
+
 
 // task id counts +1 starting at 0 and sets value in localstorage
 function generateTaskId() {
@@ -18,12 +19,11 @@ function createTaskCard(task) {
     let taskCard = $("<div>").addClass("card drag").attr("id", task.id).css('margin', '10px');
     let taskCardHeader = $("<h4>").addClass("card-header").text(task.title);
     let taskCardBod = $("<div>").addClass("card-body").text(task.description);
-    let taskCardDate = $("<div>").addClass("card-footer").text(task.dateEl);
-    let taskCardId = $("<p>").addClass("card-text").text(task.id);
+    let taskCardDate = $("<div>").addClass("card-body").text(task.date);
     let deleteTaskBtn = $("<a>").addClass("btn btn-danger remove-task").attr("id", "remove-task").text("Remove");
 
     // append elements to task card body
-    taskCardBod.append(taskCardId, taskCardDate, deleteTaskBtn);
+    taskCardBod.append(taskCardDate, deleteTaskBtn);
 
     // Append header to card body
     taskCard.append(taskCardHeader, taskCardBod);
@@ -63,18 +63,18 @@ function handleAddTask(event) {
     event.preventDefault();
 
     // pull data from bread crumbs form
-    let titleEl = document.querySelector("#titleData");
-    let dateEl = document.querySelector("#dateData");
-    let descriptionEl = document.querySelector("#statusData");
+    let titleEl = $("#titleData");
+    let dateEl = $("#dateData");
+    let descriptionEl = $("#statusData");
 
     // New task Id
     generateTaskId();
 
     // Create a new task object
     let nuTask = {
-        title: titleEl.value,
-        date: dateEl.value,
-        description: descriptionEl.value,
+        title: titleEl.val(),
+        date: dateEl.val(),
+        description: descriptionEl.val(),
         id: nextId,
         status: "to-do"
     };
@@ -91,10 +91,22 @@ function handleAddTask(event) {
 }
 
 
+
 // function remove a task
 function handleDeleteTask(event) {
+    
+    // establish remove by Id 
+    let remove = parseInt($(event.target).closest('.card').attr('id'));
 
+    // filter tasks for id that has triggered 'remove
+    taskList.filter((task) => {task.id !== remove});
 
+    // update localStorage tasks JSON object 
+    localStorage.setItem("tasks", JSON.stringify(taskList));
+
+    // eliminate the task card from the viewport
+    $(event.target).closest('.card').remove();
+    
 }
 
 // function to handle dropping a task into a new status lane
@@ -110,11 +122,9 @@ $(document).ready(function () {
     $("#addCrumb").on("click", handleAddTask);
 
     //  add listener for removing tasks
-    $(".container").on("click", '.remove-task', function (event) {
+    $(".container").on("click", '.remove-task', handleDeleteTask);
 
-        // eliminate the task from the viewport
-        $(event.target).closest('.card').remove();
-    });
+    
 
     // add date picker to due date field
     $("#dateData").datepicker({
