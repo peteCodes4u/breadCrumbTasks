@@ -16,11 +16,19 @@ function generateTaskId() {
 
 //task card function
 function createTaskCard(task) {
-    let taskCard = $("<div>").addClass("card drag").attr("id", task.id).css('margin', '10px');
-    let taskCardHeader = $("<h4>").addClass("card-header").text(task.title);
-    let taskCardBod = $("<div>").addClass("card-body").text(task.description);
-    let taskCardDate = $("<div>").addClass("card-body").text(task.date);
+
+    let taskCard = $("<section>").addClass("card drag").attr("id", task.id);
+    let taskCardHeader = $("<h2>").addClass("card-header").text(task.title);
+    let taskCardBod = $("<section>").addClass("card-body").text(task.description);
+    let taskCardDate = $("<section>").addClass("card-body").text(task.date);
     let deleteTaskBtn = $("<a>").addClass("btn btn-danger remove-task").attr("id", "remove-task").text("Remove");
+
+
+    //set status by lane
+    const laneStatus = coordinateTaskColor(task.date);
+
+    // add laneStatus as class to task card
+    taskCard.addClass(laneStatus)
 
     // append elements to task card body
     taskCardBod.append(taskCardDate, deleteTaskBtn);
@@ -52,14 +60,16 @@ function renderTaskList() {
         zIndex: 100,
         opacity: 0.5,
         helper: function (event) {
-            let originalcard = $(event.target).hasClass('.drag') ? $(event.target) : $(event.target).closest('.drag');
-            return originalcard.clone().css({ width: originalcard.outerWidth(), });
+            let breadCrumbTask = $(event.target).hasClass('.drag') 
+            ? $(event.target) : $(event.target).closest('.drag');
+            return breadCrumbTask.clone();
         }
     });
 }
 
 // function for adding new tasks
 function handleAddTask(event) {
+
     event.preventDefault();
 
     // pull data from bread crumbs form
@@ -67,18 +77,18 @@ function handleAddTask(event) {
     let dateEl = $("#dateData");
     let descriptionEl = $("#statusData");
 
-    // New task Id
+    // evoke generate task Id function
     generateTaskId();
 
-    // Create a new task object
+    // new task object that pulls values from bread crumb form
     let nuTask = {
         title: titleEl.val(),
         date: dateEl.val(),
         description: descriptionEl.val(),
         id: nextId,
-        status: "to-do"
+        progState: "to-do"
     };
-
+    
     // reset form after bread crumb add
     document.getElementById("form").reset();
 
@@ -90,21 +100,26 @@ function handleAddTask(event) {
     renderTaskList();
 }
 
+// function to color coordinate task cards by state (today, past due, future)
+function coordinateTaskColor(task) {
+    // let color =  JSON.parse(localStorage.getItem("tasks"))
+
+}
 
 
 // function remove a task
 function handleDeleteTask(event) {
     
-    // establish remove by Id 
+    // identify task card by id that has been selected for removal
     let remove = parseInt($(event.target).closest('.card').attr('id'));
 
-    // filter tasks for id that has triggered 'remove
-    taskList.filter((task) => {task.id !== remove});
+    // filter tasks JSON object in localStorage for id marked for removal
+    taskList = taskList.filter((task) => remove !== task.id );
 
-    // update localStorage tasks JSON object 
+    // update local storage (eliminate object from tasks array)
     localStorage.setItem("tasks", JSON.stringify(taskList));
 
-    // eliminate the task card from the viewport
+    // eliminate the task card from the view port
     $(event.target).closest('.card').remove();
     
 }
@@ -112,6 +127,26 @@ function handleDeleteTask(event) {
 // function to handle dropping a task into a new status lane
 function handleDrop(event, ui) {
 
+
+}
+
+// color coordination function to color task cards by date
+function coordinateTaskColor(dateEl) {
+
+    // set today using dayjs
+    let today = dayjs();
+
+    // use dayjs to set color coordination by date
+    let coordinateTaskColor = dayjs(dateEl);
+
+    // determine date difference (when date > today (future) || date = today (today) || date < today (pastdue)
+    let difference = today.diff(coordinateTaskColor, 'day', true);
+
+    if (difference > 1) {
+        return "pastdue";
+    } else if  (difference > 0 & difference <= 1) {
+        return "today";
+    } else { return "future";}
 
 }
 
@@ -124,9 +159,7 @@ $(document).ready(function () {
     //  add listener for removing tasks
     $(".container").on("click", '.remove-task', handleDeleteTask);
 
-    
-
-    // add date picker to due date field
+    // add date picker to finish date field
     $("#dateData").datepicker({
         changeMonth: true,
         changeYear: true,
@@ -142,4 +175,6 @@ $(document).ready(function () {
 
     // evoke render task list to populate lanes
     renderTaskList();
+
+
 });

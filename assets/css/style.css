@@ -1,16 +1,59 @@
+/* establishes styling for app body */
 body {
   font-family: 'Open Sans', sans-serif;
   font-size: 16px;
+  background-image:linear-gradient(to left, #743ad5, #d5ac3a);
 }
 
+/* establishes styling for swim lanes todo, in progress, and done */
 .swim-lanes {
   min-height: 60vh;
+  -webkit-text-fill-color: rgb(36, 68, 143);
+  text-shadow: 1px 1px 1px;
+     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+     font-size: 30px;
+     font-weight: bold;
 }
 
+/* establishes styling for task-cards (bread crumbs) */
 .task-card {
   margin: 0 auto;
 }
 
+/* selector for task-cards (bread crumbs) */
 .task-card:hover {
   cursor: grab;
+}
+
+/* adds custom styling to header */
+header {
+  -webkit-text-fill-color: #3ab1d5;
+  text-shadow: 2px 3px 4px;
+     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+     font-size: 30px;
+     font-weight: bold;
+}
+
+/* adds custom styling to remove task button  */
+.remove-task {
+  -webkit-text-fill-color: #030303;
+  font-weight: bold;
+}
+
+/* adds custom tyling to bread crumb task cards with class 'today' */
+.today {
+  -webkit-text-fill-color: #eceff0;
+  background-image:linear-gradient(to left, #f77a06, #b7f7078d);
+}
+
+/* adds custom tyling to bread crumb task cards with class 'pastdue' */
+.pastdue {
+  -webkit-text-fill-color: #eceff0;
+  background-image:linear-gradient(to left, #d56b3a, #d53ac38d);
+}
+
+/* adds custom tyling to bread crumb task cards with class 'future' */
+.future { 
+  -webkit-text-fill-color: #eceff0;
+  background-image:linear-gradient(to left, #743ad5, #3ab1d5);
 }
