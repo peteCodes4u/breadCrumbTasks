@@ -197,10 +197,11 @@ $(document).ready(function () {
             // save the new progState to the json object 
             localStorage.setItem("tasks", JSON.stringify(taskList));
 
-
             // color update when moved to done lane
             if (newProgState === "done") {
                 $(ui.draggable).addClass("future");
+            } else if (newProgState === "in-progress" || "to-do") {
+                location.reload();
             }
             // append the breadcrumb to the new lane
             ui.draggable.detach().appendTo($(this));
