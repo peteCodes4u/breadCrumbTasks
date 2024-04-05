@@ -159,7 +159,9 @@ const coordinateTaskColor = (dateEl) => {
     let difference = tDay.diff(coordinateTaskColor, "day", true);
 
     // evaluate bread crumb date and apply determine the class for colorization
-    if (difference > 1) {
+    if( task.progState === "done") { 
+        return "future"
+    } else if (difference > 1) {
         return "pastdue";
     } else if (difference > 0 && difference <= 1) {
         return "today";
