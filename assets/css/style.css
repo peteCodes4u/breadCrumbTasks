@@ -34,6 +34,7 @@ header {
      font-weight: bold;
 }
 
+
 /* adds custom styling to remove task button  */
 .remove-task {
   -webkit-text-fill-color: #030303;
