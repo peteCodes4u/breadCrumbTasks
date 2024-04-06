@@ -86,10 +86,15 @@ const renderTaskList = () => {
 const handleAddTask = (event) => {
     event.preventDefault();
 
+    if ($("#titleData").val() == '' || $("#dateData").val() == '') {
+        alert('Please provide input for Task title, Finish Date for your Bread Crumb!');
+        return;
+      }
+
     // pull data from bread crumbs form
     let titleEl = $("#titleData");
     let dateEl = $("#dateData");
-    let descriptionEl = $("#statusData");
+    let descriptionEl = $("#noteData");
 
     // evoke generate task Id function
     let crumbId = generateTaskId();
