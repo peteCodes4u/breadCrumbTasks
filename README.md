@@ -17,7 +17,7 @@ https://petecodes4u.github.io/breadCrumbTasks/
 
 The intended usage of this application is to list tasks with movable task cards that can be applied to swim lanes for 'to do', 'in progress', and 'done' with the purpose of assisting users by visually organizing tasks. 
 
-![](./assets/images/breadCrumbs.gif)
+![](./assets/images/breadCrumbs2.gif)
 
 ## Features
 
